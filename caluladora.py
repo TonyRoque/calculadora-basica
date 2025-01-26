@@ -1,49 +1,17 @@
 import math
-
-# Operações a serem realizadas.
-
-def adicao(a, b):
-    return a + b
-
-def subtracao(a, b):
-    return a - b
-
-def multiplicacao(a, b):
-    return a * b
-
-def divisao(a, b):
-    if b != 0:
-        return a / b
-    else:
-        return "Erro: Não é possivel realizar divisão por zero."
-
-def raiz_quadrada(a):
-    if a >= 0:
-        return math.sqrt(a)
-    else:
-        return "Erro: Tente novamente. Raiz negativa não exite."
-
-def potenciacao(a, b):
-    return a ** b
-
-# Validar entradas do usuario.
+import time
 
 def obter_numero(mensagem):
-    """
-    Validar a entrada de um número.
-    Repete ate que seja digitado um número valido.
-    """
+    """Solicita um número com validação de entrada."""
     while True:
         try:
             return float(input(mensagem))
         except ValueError:
-            print("Erro: Por favor, insira um número válido.")
+            print("Erro: Entrada inválida. Tente novamente.")
 
 def menu():
-    """
-    Exibe o menu de opções para o usuário.
-    """
-    print("\n--- CALCULADORA AVANÇADA ---")
+    """Menu de opções."""
+    print("\n=== CALCULADORA ===")
     print("Escolha uma operação:")
     print("1 - Adição")
     print("2 - Subtração")
@@ -52,45 +20,60 @@ def menu():
     print("5 - Raiz Quadrada")
     print("6 - Potenciação")
     print("Digite '0001' para sair.")
-    print("-----------------------------")
+    print("==============================")
+
+def operacao_basica(op, num1, num2):
+    """Operações basicas."""
+    operacoes = {
+        "1": num1 + num2,
+        "2": num1 - num2,
+        "3": num1 * num2,
+        "4": "Erro: Divisão por zero não é permitida." if num2 == 0 else num1 / num2,
+    }
+    return operacoes.get(op, "Erro: Operação inválida.")
+
+def raiz_quadrada(num):
+    """Calcula a raiz quadrada de um número."""
+    if num < 0:
+        return "Erro: Não é possível calcular a raiz quadrada de um número negativo."
+    return math.sqrt(num)
+
+def potencia(base, expoente):
+    """Calcula a potenciação."""
+    return base ** expoente
 
 def calculadora():
+    """Função principal da calculadora."""
     while True:
         menu()
-        operacao = input("Digite o número da operação desejada: ")
+        operacao = input("Operação desejada: ").strip()
 
         if operacao == "0001":
-            print("Encerrando a calculadora. Até mais!")
+            print("Encerrando. Até mais!")
             break
 
-        operacoes = {
-            "1": adicao,
-            "2": subtracao,
-            "3": multiplicacao,
-            "4": divisao,
-            "5": raiz_quadrada,
-            "6": potenciacao
-        }
+        if operacao in ["1", "2", "3", "4"]:
+            num1 = obter_numero("Digite o primeiro número: ")
+            num2 = obter_numero("Digite o segundo número: ")
+            resultado = operacao_basica(operacao, num1, num2)
+            print(f"O resultado é: {resultado}")
 
-        if operacao in operacoes:
-            if operacao == "5":  # Raiz quadrada
-                num = obter_numero("Digite o número para calcular a raiz quadrada: ")
-                resultado = raiz_quadrada(num)
-                print(f"O resultado é: {resultado}")
+        elif operacao == "5":
+            num = obter_numero("Digite o número para calcular a raiz quadrada: ")
+            resultado = raiz_quadrada(num)
+            print(f"O resultado é: {resultado}")
 
-            elif operacao == "6":  # Potenciação
-                base = obter_numero("Digite a base: ")
-                expoente = obter_numero("Digite o expoente: ")
-                resultado = potenciacao(base, expoente)
-                print(f"O resultado é: {resultado}")
+        elif operacao == "6":
+            base = obter_numero("Digite a base: ")
+            expoente = obter_numero("Digite o expoente: ")
+            resultado = potencia(base, expoente)
+            print(f"O resultado é: {resultado}")
 
-            else:  # Operações básicas
-                num1 = obter_numero("Digite o primeiro número: ")
-                num2 = obter_numero("Digite o segundo número: ")
-                resultado = operacoes[operacao](num1, num2)
-                print(f"O resultado é: {resultado}")
         else:
             print("Erro: Operação inválida. Por favor, escolha uma opção válida.")
 
-# Executar a calculadora
+        # Pausa antes de exibir o menu novamente
+        time.sleep(2)
+
 calculadora()
+
